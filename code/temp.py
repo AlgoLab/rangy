@@ -1,8 +1,5 @@
 import networkx as nx
-from networkx.drawing.nx_agraph import write_dot, graphviz_layout
-import matplotlib.pyplot as plt
 from itertools import combinations
-import Node, Tree
 
 def labels_set(t):
     #using set of words to get separated labels from the tree.
