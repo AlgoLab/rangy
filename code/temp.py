@@ -1,3 +1,4 @@
+import argparse
 import networkx as nx
 from itertools import combinations
 from queue import SimpleQueue
@@ -96,7 +97,7 @@ def link_and_cut_inner(t, v, w):
     return new_t
 
 def lc_clean_set(s):
-    #given a set of trees, check for trees which comes with bad ordering after 
+    #Given a set of trees, check for trees which comes with bad ordering after 
     # link-and-cut operations, reorder their adj_list representation and return
     # the new 'clean' set.
     new_s = set()
@@ -133,24 +134,47 @@ def link_and_cut(trees):
         ret_set = ret_set.union(link_and_cut_single_tree(t))
     return ret_set
 
-def main(): 
-    with open('input/input4.txt', 'r') as f:
-        tree1 = f.read()
-    #d1 = permutation_single_tree(tree1)            #NB: a d1 non c'è l'albero 
-    #d2 = permutation(d1)                           #iniziale, ma ritorna a d2, 
-    #d3 = permutation(d2)                           #aggiungermo a mano?
-    #d4 = permutation(d3)
+def prufer_check(s1, s2):
+    #Given 2 sets, one is trees from permutations, the other is tree from 
+    # link-and-cut, convert every tree into Prufer sequence using Networkx, 
+    # filter duplicates and then looks for matches between the 2 sets. 
+    # Return a report(?).
 
     #prufer = set()
     #for t in d4:
     #    g=nx.parse_adjlist(t.splitlines(), nodetype=int)
-    #    prufer.add(repr(nx.to_prufer_sequence(g)))#
-    #print('prufer list:')
-    #print(sorted(prufer))
+    #    prufer.add(repr(nx.to_prufer_sequence(g)))
+    pass
 
-    lc = link_and_cut_single_tree(tree1)
-    print(lc_subsets(tree1))
-    print(lc)
+def exh_search(t1, t2, n):
+    #Given 2 trees 't1' and 't2', and an integer 'n', for 'n' times, iterate 
+    # 'permutations()' on 't1' and 'link_and_cut()' on 't2'. 
+    # Then call 'prufer_check()' on the resulting sets and return the report.
+    return ""
+
+def main():
+    parser = argparse.ArgumentParser(description='''Given 2 trees(in AdjList 
+        format) perform exhaustive search for permutations and link-and-cut 
+        trees ata certain distance(default=1) and check if the two operations 
+        generate one the same tree from a different starting tree.''')
+    parser.add_argument('t1', help='''path to the txt file containing the 
+        first origin tree''')
+    parser.add_argument('t2', help='''path to the txt file containing the 
+        second origin tree''')
+    parser.add_argument('n', type=int, help='''The number of iterations for each 
+        algorithm. Default is 1, so calculate every tree possible with only 1 
+        permutation/link-and-cut, for n=2 every tree possible with 2 
+        permutations/link-and-cuts exc...''')
+    args = parser.parse_args()
+
+    with open(args.t1, 'r') as f1:
+        tree1 = f1.read()
+
+    with open(args.t2, 'r') as f2:
+        tree2 = f2.read()
+
+    report = exh_search(tree1, tree2, args.n)
+    print(report)
 
 if __name__ == "__main__":
     main()
